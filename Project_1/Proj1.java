@@ -30,8 +30,8 @@ public class Proj1 {
     * Line 6: -------------
     * Line 7: Enter your choice:
     */
-   public static void printMenu() {
-
+   public static void printMenu() {//complete
+     System.out.println("\n u/U: Update \n f/F: Find & Replace \n s/S: Statistics \n e/E: Exit \n ------------- \n Enter your choice:");
    }
 
    /**
@@ -41,9 +41,32 @@ public class Proj1 {
     * @param c the character
     * @return true if the character is special character, false otherwise.
     */
-   public static boolean isSpecial(char c) {
-    return false; //REPLACE THIS
+   public static boolean isSpecial(char c) { //complete not optimized
+     if(isPunctuation(c)||isDigit(c)||isLetter(c)){
+          return false;
+     }
+    return true; //REPLACE THIS
    }
+
+     public static boolean isLetter(char c){
+          char[] normalChars = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+     for(char i:normalChars){
+          if(i==c){
+               return true;
+          }
+     }
+     return false;
+     }
+
+     public static boolean isDigit(char c){
+          char[] digits = {'1','2','3','4','5','6','7','8','9','0'};
+          for(char i:digits){
+               if(i==c){
+                    return true;
+               }
+          }
+          return false;
+     }
 
    /**
     * This method determines if a character is special character or not.
@@ -51,7 +74,13 @@ public class Proj1 {
     * @param c the character
     * @return true if the character is punctuation, false otherwise.
     */
-   public static boolean isPunctuation(char c) {
+   public static boolean isPunctuation(char c) {// complete not optimized
+          char[] punctuationList = {'!','?','.',',','\'','\"',':',';','-','_'};
+          for(char i:punctuationList){
+               if(i==c){
+                    return true;
+               }
+          }
         return false; //REPLACE THIS
    }
 
@@ -62,8 +91,35 @@ public class Proj1 {
     * @param category specifies what to count in the input text.
     * @return the count for the particular character category
     */
-   public static int count(String text, char category) {
-      return -1; //REPLACE THIS
+   public static int count(String text, char category) {// maybe done 
+   /*Categories:
+   *any =A
+   *letters = L
+   *digits = D
+   * special characters = S
+   * punctuation characters = P
+   */
+     char[] list =text.toCharArray();
+     int counter = 0;
+     for(int i=0;i<list.length;i++){
+          if(category=='A'){
+               counter++;
+               continue;
+          } else if(category=='L'&& isLetter(list[i])) {
+               counter++;
+               continue;
+          } else if(category=='D'&& isDigit(list[i])){
+               counter++;
+               continue;
+          } else if(category=='S'&& isSpecial(list[i])){
+               counter++;
+               continue;
+          } else if(category=='P'&& isPunctuation(list[i])){
+               counter++;
+               continue;
+          }
+     }
+      return counter; //REPLACE THIS
    }
 
    /**
@@ -85,7 +141,18 @@ public class Proj1 {
     */
    public static void printStats(int length, int letterCount, int digitsCount,
                                  int specialsCount, int punctuationsCount) {
+          double l = length;
+          double lCount = Math.round((letterCount/l)*10000)/100.0;
+          double dCount = Math.round((digitsCount/l)*10000)/100.0;
+          double sCount = Math.round((specialsCount/l)*10000)/100.0;
+          double pCount = Math.round((punctuationsCount/l)*10000)/100.0;
 
+          System.out.println("There are a total of "+length+" character in the text.");
+          System.out.println("Letter characters account for "+lCount+" percent in the text.");
+          System.out.println("Digit characters account for "+dCount+" percent in the text.");
+          System.out.println("Special characters account for "+sCount+" percent in the text.");
+          System.out.println("Punctuation characters account for "+pCount+" percent in the text.");
+          System.out.println();
    }
 
    /**
@@ -95,9 +162,17 @@ public class Proj1 {
     * @param text the input text
     * @return the "reversed halves" string
     */
-   public static String reverseHalves(String text) {
-        return ""; //REPLACE THIS
-   }
+    public static String reverseHalves(String text){
+        char[] mainList = text.toCharArray();
+        String result = "";
+        for(int i=(int)Math.floor(text.length()/2);i>0;i--){
+            result += mainList[i-1];
+        }
+        for(int i=text.length();i>Math.floor(text.length()/2);i--){
+            result += mainList[i-1];
+        }
+        return result;
+    }
 
    /**
     * This method reverse halves of the input text by putting the first
@@ -136,6 +211,6 @@ public class Proj1 {
     * @param args commandline args
     */
    public static void main(String[] args) {
-
+     printStats(13,3,4,5,6);
    }
 }
