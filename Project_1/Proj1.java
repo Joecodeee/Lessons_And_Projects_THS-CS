@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 /** Project 1 skeleton code.
  *  Definition: Proj1.java is a console-based, menu-driven program that contains
@@ -31,7 +32,7 @@ public class Proj1 {
     * Line 7: Enter your choice:
     */
    public static void printMenu() {//complete
-     System.out.println("\n u/U: Update \n f/F: Find & Replace \n s/S: Statistics \n e/E: Exit \n ------------- \n Enter your choice:");
+     System.out.println("\nu/U: Update \nf/F: Find & Replace \nt/T: Transform \ns/S: Statistics \ne/E: Exit \n ------------- \n Enter your choice:");
    }
 
    /**
@@ -42,31 +43,11 @@ public class Proj1 {
     * @return true if the character is special character, false otherwise.
     */
    public static boolean isSpecial(char c) { //complete not optimized
-     if(isPunctuation(c)||isDigit(c)||isLetter(c)){
+     if(isPunctuation(c)||Character.isDigit(c)||Character.isLetter(c)||c==' '){
           return false;
      }
     return true; //REPLACE THIS
    }
-
-     public static boolean isLetter(char c){
-          char[] normalChars = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
-     for(char i:normalChars){
-          if(i==c){
-               return true;
-          }
-     }
-     return false;
-     }
-
-     public static boolean isDigit(char c){
-          char[] digits = {'1','2','3','4','5','6','7','8','9','0'};
-          for(char i:digits){
-               if(i==c){
-                    return true;
-               }
-          }
-          return false;
-     }
 
    /**
     * This method determines if a character is special character or not.
@@ -103,20 +84,15 @@ public class Proj1 {
      int counter = 0;
      for(int i=0;i<list.length;i++){
           if(category=='A'){
+               counter++;              
+          } else if(category=='L'&& Character.isLetter(list[i])) {
                counter++;
-               continue;
-          } else if(category=='L'&& isLetter(list[i])) {
+          } else if(category=='D'&& Character.isDigit(list[i])){
                counter++;
-               continue;
-          } else if(category=='D'&& isDigit(list[i])){
-               counter++;
-               continue;
           } else if(category=='S'&& isSpecial(list[i])){
                counter++;
-               continue;
           } else if(category=='P'&& isPunctuation(list[i])){
                counter++;
-               continue;
           }
      }
       return counter; //REPLACE THIS
@@ -151,8 +127,7 @@ public class Proj1 {
           System.out.println("Letter characters account for "+lCount+" percent in the text.");
           System.out.println("Digit characters account for "+dCount+" percent in the text.");
           System.out.println("Special characters account for "+sCount+" percent in the text.");
-          System.out.println("Punctuation characters account for "+pCount+" percent in the text.");
-          System.out.println();
+          System.out.println("Punctuation characters account for "+pCount+" percent in the text.\n");
    }
 
    /**
@@ -162,7 +137,7 @@ public class Proj1 {
     * @param text the input text
     * @return the "reversed halves" string
     */
-    public static String reverseHalves(String text){
+    public static String reverseHalves(String text){ // maybe done
         char[] mainList = text.toCharArray();
         String result = "";
         for(int i=(int)Math.floor(text.length()/2);i>0;i--){
@@ -182,8 +157,20 @@ public class Proj1 {
     * @param text the input text
     * @return the scrambled string
     */
-   public static String scramble(String text) {
-        return ""; //REPLACE THIS
+   public static String scramble(String text) { //maybe done
+     String result ="";
+     char[] list = text.toCharArray();
+     if(text.length()==1){
+          return text;
+          }
+     for(int i=0;i<Math.floor(text.length()/2);i++){
+          result += list[i];
+          result += list[text.length()-i-1];
+     }
+     if(text.length()%2==1){
+          result += list[(int)Math.ceil(text.length()/2)];
+     }
+        return result; //REPLACE THIS
    }
 
    /**
@@ -195,7 +182,30 @@ public class Proj1 {
     * @return input text weaved
     */
    public static String weave(String text){
-        return ""; //REPLACE THIS
+     String result="";
+     char[] list = text.toCharArray();
+     if(text.length()==1){return text;}
+     int loops= (int)Math.floor(text.length()/4);
+     for(int i =0;i <=loops-1;i++){// optmize
+          for(int j = 0; j<1;j++){
+          result += list[(j)+(i*4)];
+          result += list[(j+2)+(i*4)];
+          result += list[(j+1)+(i*4)];
+          result += list[(j+3)+(i*4)];
+          }
+     }
+     if(text.length()%4==3){
+          result +=list[((loops+1)*4)-4];
+          result +=list[((loops+1)*4)-2];
+          result +=list[((loops+1)*4)-3];
+     }else if(text.length()%4==2){
+          result +=list[((loops+1)*4)-4];
+          result +=list[((loops+1)*4)-3];
+     }else if(text.length()%4==1){
+          result +=list[text.length()-1];
+         
+     }
+     return result;//REPLACE THIS
    }
 
    /**
@@ -211,6 +221,49 @@ public class Proj1 {
     * @param args commandline args
     */
    public static void main(String[] args) {
-     printStats(13,3,4,5,6);
+     args= new String[2];
+    Scanner myObj = new Scanner(System.in);  
+    System.out.println("Please enter the text: ");
+    args[0] = myObj.nextLine();
+    String userInput="";
+    while(!(userInput.equalsIgnoreCase("e"))){
+     printMenu();
+     args[1]= myObj.nextLine();
+     userInput= args[1];
+     if(userInput.equalsIgnoreCase("u")){ //update
+          System.out.println("Please enter the text: ");
+          args[0] = myObj.nextLine();
+          System.out.println("The new text is: "+args[0]);
+
+     }else if(userInput.equalsIgnoreCase("f")){//find and replace
+
+          System.out.println("Please enter the character sequence to find:");
+          String oldString = myObj.nextLine();
+          System.out.println("Please enter the replacement sequence:");
+          String newString = myObj.nextLine();
+          args[0] = args[0].replaceAll(oldString,newString);
+
+
+          System.out.println("The new text is: "+args[0]);
+     }else if(userInput.equalsIgnoreCase("s")){//statistics
+          int l=count(args[0],'L'); int d=count(args[0],'D'); int s=count(args[0],'S'); int p=count(args[0],'P');
+          printStats(args[0].length(),l,d,s,p);
+     }else if(userInput.equalsIgnoreCase("t")){//transform
+          int rand = gen.nextInt(3);
+          if(rand==0){
+               args[0] = reverseHalves(args[0]);
+          }else if(rand==1){
+               args[0] = scramble(args[0]);
+          }else if(rand==2){
+               args[0] = weave(args[0]);
+          }
+          System.out.println("The new text is: "+args[0]);
+     }else if(userInput.equalsIgnoreCase("e")){
+          //lol
+     }else{
+          System.out.println("Invalid option! Try again!");
+     }
+    }
+     myObj.close();//very important
    }
 }
